@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Injector</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="injector">
+        <div class="controls">
+          <textarea id="text" cols="40" rows="5"></textarea>
+          <button id="copy">get payload</button>
+          <button id="send">send payload</button>
+          <button id="sendobs">send obs payload</button>
+        </div>
+        <iframe id="iframe" src="/index.html"></iframe>
+      </div>
+    </div>
+    <script type="module" src="/src/inject.ts"></script>
+  </body>
+</html>
