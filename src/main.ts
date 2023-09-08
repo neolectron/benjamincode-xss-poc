@@ -1,9 +1,9 @@
 import './style.css';
+import './main.css';
+
 import { client } from './tmi';
 
-const marquee = document.querySelector<HTMLMarqueeElement>('#app marquee')!;
-
 client.on('message', (_channel, _tags, message) => {
-  marquee.innerHTML = message;
+  document.querySelector<HTMLMarqueeElement>('#app marquee')!.innerHTML = message;
   // marquee.innerText = message;
 });

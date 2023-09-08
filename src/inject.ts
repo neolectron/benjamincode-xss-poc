@@ -1,41 +1,70 @@
 import './style.css';
+import './inject.css';
 import { client } from './tmi';
 
-const makeTinyFunctionString = (fnStr: string) => fnStr.replace(/\s/g, '').replace('()=>', '').replaceAll('"', "'");
-const copyButton = document.querySelector<HTMLButtonElement>('#app #copy')!;
-const sendButton = document.querySelector<HTMLButtonElement>('#app #send')!;
-const sendOBSbutton = document.querySelector<HTMLButtonElement>('#app #sendobs')!;
-const textArea = document.querySelector<HTMLTextAreaElement>('#app #text')!;
+// this function is ugly and very specific,
+// I fucking hate minifiers that do not support esm.
+const makeTinyFunctionString = (fnStr: string) =>
+  fnStr
+    .replace(/\s/g, '')
+    .replace('const', 'const ')
+    .replace(/new/g, 'new ')
+    .replace('()=>{', '')
+    .replace(/[;}]$/, '')
+    .replace(/;/g, '; ')
+    .replaceAll('"', "'")
+
+// selectors
+const sendButton = document.querySelector<HTMLButtonElement>('#app .controls-sendchat')!;
+const copyButton = document.querySelector<HTMLButtonElement>('#app .preview-copy')!;
+const startOBSButton = document.querySelector<HTMLButtonElement>('#app .obscontrols-start')!;
+const changeOBSButton = document.querySelector<HTMLButtonElement>('#app .obscontrols-change')!;
+const textArea = document.querySelector<HTMLTextAreaElement>('#app .controls-input')!;
+const resultPre = document.querySelector<HTMLPreElement>('#app .preview-result')!;
+
 const createPayloadString = (tinyFunction: string) =>
   `<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onload="${tinyFunction}">`;
 
-// const functionToStringContent = (fn: () => void) => fn.toString()
-// const demoPayload = buildPayload(() => document.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-const ws = new WebSocket('ws://localhost:4455');
+const startOBSFn = () => {
+  const ws = new WebSocket('ws://localhost:4455');
+  ws.addEventListener('open', () => {
+    ws.send(JSON.stringify({ op: 1, d: { rpcVersion: 1 } }));
+    ws.send(JSON.stringify({ op: 6, d: { requestId: 2, requestType: 'StartRecord' } }));
+  });
+};
 
-copyButton.addEventListener('click', () => {
-  const payload = createPayloadString(makeTinyFunctionString(textArea.value));
-  navigator.clipboard.writeText(payload);
-});
+const changeSceneFn = () => {
+  const ws = new WebSocket('ws://localhost:4455');
+  ws.addEventListener('open', () => {
+    ws.send(JSON.stringify({ op: 1, d: { rpcVersion: 1 } }));
+    ws.send(
+      JSON.stringify({
+        op: 6,
+        d: { requestId: 2, requestType: 'SetCurrentProgramScene', requestData: { sceneName: 'WebcamBen' } },
+      }),
+    );
+  });
+};
 
 sendButton.addEventListener('click', () => {
   const payload = createPayloadString(makeTinyFunctionString(textArea.value));
   client.say('neolectron', payload);
 });
 
-sendOBSbutton.addEventListener('click', () => {
-  const obsDemoPayload = {
-    op: 6,
-    d: { requestType: 'SetCurrentProgramScene', requestData: { sceneName: '#-----------------' } },
-  };
-  ws.send(JSON.stringify(obsDemoPayload));
+textArea.addEventListener('input', () => {
+  const payload = createPayloadString(makeTinyFunctionString(textArea.value));
+  resultPre.innerText = payload;
 });
 
-ws.addEventListener('open', () => {
-  console.log('connected to obs websocket');
+copyButton.addEventListener('click', () => {
+  const payload = createPayloadString(makeTinyFunctionString(textArea.value));
+  navigator.clipboard.writeText(payload);
 });
 
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log('<', data);
-};
+startOBSButton.addEventListener('click', () => {
+  textArea.textContent = startOBSFn.toString();
+});
+
+changeOBSButton.addEventListener('click', () => {
+  textArea.textContent = changeSceneFn.toString();
+});

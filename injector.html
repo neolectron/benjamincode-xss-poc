@@ -10,12 +10,28 @@
     <div id="app">
       <div class="injector">
         <div class="controls">
-          <textarea id="text" cols="40" rows="5"></textarea>
-          <button id="copy">get payload</button>
-          <button id="send">send payload</button>
-          <button id="sendobs">send obs payload</button>
+          <textarea class="controls-input" cols="20" rows="5" placeholder="type javacript to inject">
+document.body.innerHTML = "PIRATED!"</textarea
+          >
+          <button class="controls-sendchat">send to chat</button>
         </div>
-        <iframe id="iframe" src="/index.html"></iframe>
+
+        <div class="preview">
+          <pre class="preview-result">
+&lt;img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onload=""&gt;</pre
+          >
+          <button class="preview-copy">copy payload</button>
+        </div>
+
+        <div class="obscontrols">
+          OBS:
+          <button class="obscontrols-start">start stream</button>
+          <button class="obscontrols-change">change scene</button>
+        </div>
+        <div class="stream-preview">
+          <iframe class="stream-video" src="/index.html"></iframe>
+          <iframe class="stream-chat" src="https://www.twitch.tv/popout/neolectron/chat"></iframe>
+        </div>
       </div>
     </div>
     <script type="module" src="/src/inject.ts"></script>

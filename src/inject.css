@@ -1,0 +1,35 @@
+.injector {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /*  */
+  & .controls {
+    display: flex;
+    & .controls-input {
+      flex-grow: 1;
+      height: 100px;
+      padding: 10px;
+      resize: none;
+    }
+  }
+  /*  */
+  & .preview {
+    display: flex;
+    & .preview-result {
+      flex-grow: 1;
+    }
+  }
+  /*  */
+  & .stream-preview {
+    flex-grow: 1;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border: none;
+
+    & .stream-video {
+      flex-grow: 1;
+    }
+  }
+}
