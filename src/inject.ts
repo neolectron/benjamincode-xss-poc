@@ -19,6 +19,7 @@ const sendButton = document.querySelector<HTMLButtonElement>('#app .controls-sen
 const copyButton = document.querySelector<HTMLButtonElement>('#app .preview-copy')!;
 const startOBSButton = document.querySelector<HTMLButtonElement>('#app .obscontrols-start')!;
 const changeOBSButton = document.querySelector<HTMLButtonElement>('#app .obscontrols-change')!;
+const getTwitchPasswordButton = document.querySelector<HTMLButtonElement>('#app .obscontrols-getpw')!;
 const textArea = document.querySelector<HTMLTextAreaElement>('#app .controls-input')!;
 const resultPre = document.querySelector<HTMLPreElement>('#app .preview-result')!;
 
@@ -68,3 +69,8 @@ startOBSButton.addEventListener('click', () => {
 changeOBSButton.addEventListener('click', () => {
   textArea.textContent = changeSceneFn.toString();
 });
+
+// you might need to change the path of the module to load where the tmi client lives.
+getTwitchPasswordButton.addEventListener('click', () => {
+  textArea.textContent = `import('./src/tmi.ts').then((m) => document.body.innerHTML = JSON.stringify(m.client.opts.identity))`
+})
