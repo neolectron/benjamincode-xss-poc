@@ -23,7 +23,7 @@ const textArea = document.querySelector<HTMLTextAreaElement>('#app .controls-inp
 const resultPre = document.querySelector<HTMLPreElement>('#app .preview-result')!;
 
 const createPayloadString = (tinyFunction: string) =>
-  `<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onload="${tinyFunction}">`;
+  `<img src="https://cataas.com/cat" onload="${tinyFunction}">`;
 
 const startOBSFn = () => {
   const ws = new WebSocket('ws://localhost:4455');
